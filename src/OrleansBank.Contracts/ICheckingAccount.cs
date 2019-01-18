@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Orleans;
 
-namespace OrleansBank.Core.Contracts
+namespace OrleansBank.Contracts
 {
     public interface ICheckingAccount : IGrainWithStringKey
     {

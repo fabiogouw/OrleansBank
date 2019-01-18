@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using OrleansBank.WebServer.Models;
 using Orleans.Hosting;
 using Orleans;
-using OrleansBank.Core.Contracts;
+using OrleansBank.Contracts;
 
 namespace OrleansBank.WebServer.Controllers
 {

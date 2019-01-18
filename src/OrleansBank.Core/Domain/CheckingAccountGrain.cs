@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using OrleansBank.Core.Contracts;
+using OrleansBank.Contracts;
 
 namespace OrleansBank.Core
 {

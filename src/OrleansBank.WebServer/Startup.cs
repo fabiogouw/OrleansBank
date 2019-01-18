@@ -15,13 +15,11 @@ using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
 using Orleans.Runtime;
-using OrleansBank.Core;
 
 namespace OrleansBank.WebServer
 {
     public class Startup
     {
-        private static ISiloHost _silo;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -38,7 +36,6 @@ namespace OrleansBank.WebServer
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            _silo = StartSilo().Result;
             services.AddSingleton<IClusterClient>(StartClientWithRetries().Result);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -66,25 +63,6 @@ namespace OrleansBank.WebServer
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-        }
-
-        private static async Task<ISiloHost> StartSilo()
-        {
-            // define the cluster configuration
-            var builder = new SiloHostBuilder()
-                .UseLocalhostClustering()
-                .Configure<ClusterOptions>(options =>
-                {
-                    options.ClusterId = "dev";
-                    options.ServiceId = "HelloWorldApp";
-                })
-                .Configure<EndpointOptions>(options => options.AdvertisedIPAddress = IPAddress.Loopback)
-                //.ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(CheckingAccountGrain).Assembly).WithReferences())
-                .ConfigureLogging(logging => logging.AddConsole());
-
-            var host = builder.Build();
-            await host.StartAsync();
-            return host;
         }
         
         private static async Task<IClusterClient> StartClientWithRetries()
