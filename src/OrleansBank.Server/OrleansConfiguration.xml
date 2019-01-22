@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OrleansConfiguration xmlns="urn:orleans">
+  <Globals>
+    <StorageProviders>
+      <Provider Type="Orleans.Storage.MemoryStorage"
+                Name="OrleansStorage"
+                NumStorageGrains="10" />
+    </StorageProviders>
+    <!--<SeedNode Address="localhost" Port="22222" />-->
+  </Globals>
+  <!--<Defaults>
+    <Networking Address="localhost" Port="22222" />
+    <ProxyingGateway Address="localhost" Port="40000" />
+  </Defaults>-->
+</OrleansConfiguration>

@@ -26,8 +26,7 @@ namespace OrleansBank.WebServer.Controllers
         public async Task<IActionResult> About()
         {
             var account = _host.GetGrain<ICheckingAccount>("0");
-            ViewData["Message"] = await account.GetBalance();
-
+            ViewData["Message"] = await account.Credit(1.03, "test");
             return View();
         }
 

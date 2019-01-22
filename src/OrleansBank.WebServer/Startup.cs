@@ -65,12 +65,12 @@ namespace OrleansBank.WebServer
             });
         }
         
-        private static async Task<IClusterClient> StartClientWithRetries()
+        private async Task<IClusterClient> StartClientWithRetries()
         {
             int attempt = 0;
             IClusterClient client;
             client = new ClientBuilder()
-                .UseLocalhostClustering()
+                .UseAzureStorageClustering(op => { op.ConnectionString = Configuration["StorageClustering"]; })
                 .Configure<ClusterOptions>(options =>
                 {
                     options.ClusterId = "dev";
@@ -84,7 +84,7 @@ namespace OrleansBank.WebServer
             return client;
         }
 
-        private static async Task<bool> RetryFilter(Exception exception)
+        private async Task<bool> RetryFilter(Exception exception)
         {
             if (exception.GetType() != typeof(SiloUnavailableException))
             {
