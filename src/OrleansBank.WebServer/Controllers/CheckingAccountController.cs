@@ -34,16 +34,5 @@ namespace OrleansBank.WebServer.Controllers
             var account = _client.GetGrain<ICheckingAccount>(accountId);
             return Ok(await account.GetTransactions());
         }
-
-        [HttpPost("test")]
-        public async Task<IActionResult> Test()
-        {
-            for(int i = 0; i < 10000; i++)
-            {
-                var account = _client.GetGrain<ICheckingAccount>(i.ToString());
-                account.GetTransactions();
-            }
-            return Ok();
-        }
     }
 }
