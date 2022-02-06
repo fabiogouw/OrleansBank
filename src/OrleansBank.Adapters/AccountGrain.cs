@@ -7,16 +7,18 @@ namespace OrleansBank.Adapters
     [StorageProvider(ProviderName = "Accounts")]
     public class AccountGrain : Grain<Account>, IAccountActor
     {
-        public async Task MakeCredit(string uniqueId, double amount)
+        public async Task<bool> MakeCredit(string uniqueId, double amount)
         {
-            await State.MakeCredit(uniqueId, amount);
+            var result = await State.MakeCredit(uniqueId, amount);
             await WriteStateAsync();
+            return result;
         }
 
-        public async Task MakeDebit(string uniqueId, double amount)
+        public async Task<bool> MakeDebit(string uniqueId, double amount)
         {
-            await State.MakeDebit(uniqueId, amount);
+            var result = await State.MakeDebit(uniqueId, amount);
             await WriteStateAsync();
+            return result;
         }
 
         public Task<double> GetBalance()

@@ -18,21 +18,26 @@ namespace OrleansBank.UseCases
             var debitAccountBalance = await debitAccount.GetBalance();
             if (debitAccountBalance >= request.Amount)
             {
-                await debitAccount.MakeDebit(request.UniqueClientId, request.Amount);
-                await creditAccount.MakeCredit(request.UniqueClientId, request.Amount);
-                return new TransferResponse()
+                var debitOk = await debitAccount.MakeDebit(request.UniqueClientId, request.Amount);
+                if(debitOk)
                 {
-                    UniqueClientId = request.CreditAccountId,
-                    Success = true,
-                    Id = Guid.NewGuid().ToString(),
-                    RequestedAt = DateTime.UtcNow
-                };
+                    await creditAccount.MakeCredit(request.UniqueClientId, request.Amount);
+                    return new TransferResponse()
+                    {
+                        UniqueClientId = request.UniqueClientId,
+                        Success = true,
+                        Id = Guid.NewGuid().ToString(),
+                        Details = "Transferência efetuada com sucesso!",
+                        RequestedAt = DateTime.UtcNow
+                    };
+                }
             }
             return new TransferResponse()
             {
-                UniqueClientId = request.CreditAccountId,
+                UniqueClientId = request.UniqueClientId,
                 Success = false,
                 Id = Guid.NewGuid().ToString(),
+                Details = "Ocorreu um erro no processo de transferência",
                 RequestedAt = DateTime.UtcNow
             };
         }

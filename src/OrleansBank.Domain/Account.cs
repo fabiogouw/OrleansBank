@@ -5,8 +5,12 @@
         private double _balance = 10;
         private List<Transaction> _transactions = new List<Transaction>();
 
-        public Task MakeDebit(string uniqueId, double amount)
+        public Task<bool> MakeDebit(string uniqueId, double amount)
         {
+            if(_balance < amount)
+            {
+                return Task.FromResult(false);
+            }
             _balance -= amount;
             _transactions.Add(new Transaction()
             {
@@ -14,10 +18,10 @@
                 Amount = amount,
                 DateTime = DateTime.Now
             });
-            return Task.CompletedTask;
+            return Task.FromResult(true);
         }
 
-        public Task MakeCredit(string uniqueId, double amount)
+        public Task<bool> MakeCredit(string uniqueId, double amount)
         {
             _balance += amount;
             _transactions.Add(new Transaction()
@@ -26,7 +30,7 @@
                 Amount = amount,
                 DateTime = DateTime.Now
             });
-            return Task.CompletedTask;
+            return Task.FromResult(true);
         }
 
         public Task<double> GetBalance()
