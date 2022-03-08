@@ -18,10 +18,14 @@ builder.Services.AddSingleton<ITransferMoneyUseCase, TransferMoneyUseCaseImpl>()
 builder.Services.AddSingleton<IGetBalanceUseCase, GetBalanceUseCaseImpl>();
 builder.Services.AddSingleton<IAccountRepository, OrleansAccountRepository>();
 
-builder.Host.UseOrleans(b => 
+builder.Host.UseOrleans(siloBuilder => 
 {
-    b.UseLocalhostClustering();
-    b.AddMemoryGrainStorage("Accounts");
+    siloBuilder.UseLocalhostClustering();
+    //siloBuilder.AddMemoryGrainStorage("Accounts");
+    siloBuilder.AddIdempotentySqlServerGrainStorage("Accounts", options =>
+    {
+        options.ConnectionString = builder.Configuration["Orleans:Storage:Accounts:ConnectionString"];
+    });
 });
 
 var app = builder.Build();
