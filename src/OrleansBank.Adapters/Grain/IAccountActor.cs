@@ -1,7 +1,7 @@
 ﻿using Orleans;
 using OrleansBank.Domain;
 
-namespace OrleansBank.Adapters
+namespace OrleansBank.Adapters.Grain
 {
     public interface IAccountActor : IGrainWithStringKey, IAccount
     {

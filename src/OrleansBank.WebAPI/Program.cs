@@ -1,6 +1,6 @@
 using Orleans;
 using Orleans.Hosting;
-using OrleansBank.Adapters;
+using OrleansBank.Adapters.Storage;
 using OrleansBank.UseCases;
 using OrleansBank.UseCases.Ports.In;
 using OrleansBank.UseCases.Ports.Out;

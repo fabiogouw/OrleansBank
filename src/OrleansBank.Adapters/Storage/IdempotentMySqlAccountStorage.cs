@@ -2,10 +2,9 @@
 using Orleans;
 using Orleans.Runtime;
 using Orleans.Storage;
-using OrleansBank.Adapters.Storage;
 using OrleansBank.Domain;
 
-namespace OrleansBank.Adapters
+namespace OrleansBank.Adapters.Storage
 {
     public class IdempotentMySqlAccountStorage : IGrainStorage
     {
@@ -85,9 +84,13 @@ namespace OrleansBank.Adapters
             var connection = new MySqlConnection(_options.ConnectionString);
             string newEtag = CalculareNewEtag(grainState.ETag);
 
-            var commands = GetTransactionWriteCommands(connection, state.account.Transactions)
-                .Append(GetAccountWriteCommand(connection, state.account, grainState.ETag, newEtag))
-                .Append(GetIdempotencyKeyWriteCommand(connection, state.shield));
+            var commands = new MySqlCommand[] 
+                {
+                    GetIdempotencyKeyWriteCommand(connection, state.shield),
+                    GetAccountWriteCommand(connection, state.account, grainState.ETag, newEtag)
+                }
+                .Union(GetTransactionWriteCommands(connection, state.account.Transactions))
+                ;
             connection.Open();
             try
             {
@@ -107,10 +110,13 @@ namespace OrleansBank.Adapters
                     transaction.Commit();
                     RecreateState(grainState, state.account, newEtag);
                 }
-                catch (Exception)
+                catch (MySqlException ex)
                 {
                     transaction.Rollback();
-                    throw;
+                    if (!CheckIdempotencyException(ex))
+                    {
+                        throw;
+                    }
                 }
             }
             finally
@@ -120,10 +126,16 @@ namespace OrleansBank.Adapters
             return Task.CompletedTask;
         }
 
+        private bool CheckIdempotencyException(MySqlException ex)
+        {
+            return (ex.Number == (int)MySqlErrorCode.DuplicateKeyEntry && ex.Message.Contains("tb_idempotency_keys.PRIMARY"));
+        }
+
         private static void RecreateState(IGrainState grainState, Account account, string newEtag)
         {
             grainState.ETag = newEtag;
             var state = ((IdempotencyShield shield, Account account))grainState.State;
+            // after the update, we ignore the saved transactions and recreate the state with the new balance
             state.account = new Account(account.Id, account.Balance, new List<Transaction>());
         }
 

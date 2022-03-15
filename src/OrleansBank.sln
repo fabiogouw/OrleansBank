@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansBank.Domain", "OrleansBank.Domain\OrleansBank.Domain.csproj", "{91B0BCFC-8855-471A-A6C1-E0FBF8B98FC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrleansBank.Domain", "OrleansBank.Domain\OrleansBank.Domain.csproj", "{91B0BCFC-8855-471A-A6C1-E0FBF8B98FC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansBank.Adapters", "OrleansBank.Adapters\OrleansBank.Adapters.csproj", "{E6845A55-51B9-4A0C-9A6E-E4282A5F3D4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrleansBank.Adapters", "OrleansBank.Adapters\OrleansBank.Adapters.csproj", "{E6845A55-51B9-4A0C-9A6E-E4282A5F3D4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansBank.UseCases", "OrleansBank.UseCases\OrleansBank.UseCases.csproj", "{DEBB5940-9FA2-41EA-BB13-9C0868B5A295}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrleansBank.UseCases", "OrleansBank.UseCases\OrleansBank.UseCases.csproj", "{DEBB5940-9FA2-41EA-BB13-9C0868B5A295}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansBank.WebAPI", "OrleansBank.WebAPI\OrleansBank.WebAPI.csproj", "{7C568197-C407-4217-B009-66BA167C21E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrleansBank.WebAPI", "OrleansBank.WebAPI\OrleansBank.WebAPI.csproj", "{7C568197-C407-4217-B009-66BA167C21E6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B22AD0DE-D0C9-45D3-8C7E-43E74E90D246}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansBank.Adapters.Tests", "OrleansBank.Adapters.Tests\OrleansBank.Adapters.Tests.csproj", "{4BCAEBB9-FA58-4352-97C0-70FB537FB381}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{7C568197-C407-4217-B009-66BA167C21E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C568197-C407-4217-B009-66BA167C21E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C568197-C407-4217-B009-66BA167C21E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BCAEBB9-FA58-4352-97C0-70FB537FB381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BCAEBB9-FA58-4352-97C0-70FB537FB381}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BCAEBB9-FA58-4352-97C0-70FB537FB381}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BCAEBB9-FA58-4352-97C0-70FB537FB381}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{E6845A55-51B9-4A0C-9A6E-E4282A5F3D4B} = {B22AD0DE-D0C9-45D3-8C7E-43E74E90D246}
 		{DEBB5940-9FA2-41EA-BB13-9C0868B5A295} = {B22AD0DE-D0C9-45D3-8C7E-43E74E90D246}
 		{7C568197-C407-4217-B009-66BA167C21E6} = {B22AD0DE-D0C9-45D3-8C7E-43E74E90D246}
+		{4BCAEBB9-FA58-4352-97C0-70FB537FB381} = {B22AD0DE-D0C9-45D3-8C7E-43E74E90D246}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {34137C8E-E770-4AE0-A5E0-B23B1872F13A}

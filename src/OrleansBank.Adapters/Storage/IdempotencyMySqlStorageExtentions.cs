@@ -3,9 +3,8 @@ using Microsoft.Extensions.Options;
 using Orleans.Hosting;
 using Orleans.Runtime;
 using Orleans.Storage;
-using OrleansBank.Adapters.Storage;
 
-namespace OrleansBank.Adapters
+namespace OrleansBank.Adapters.Storage
 {
     public static class IdempotencyMySqlStorageExtentions
     {

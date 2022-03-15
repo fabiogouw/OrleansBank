@@ -1,8 +1,9 @@
 ﻿using Orleans;
 using Orleans.Providers;
+using OrleansBank.Adapters.Storage;
 using OrleansBank.Domain;
 
-namespace OrleansBank.Adapters
+namespace OrleansBank.Adapters.Grain
 {
     [StorageProvider(ProviderName = "Accounts")]
     public class AccountGrain : Grain<(IdempotencyShield shield, Account account)>, IAccountActor
