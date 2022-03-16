@@ -101,6 +101,7 @@ namespace OrleansBank.Adapters.Storage
                     {
                         command.Transaction = transaction;
                         int rowsAffected = command.ExecuteNonQuery();
+                        // TODO: every command should affect at least one row, but is this the right exception type to use?
                         if (rowsAffected == 0)
                         {
                             throw new InconsistentStateException(@$"Version conflict (WriteState): 
@@ -113,10 +114,7 @@ namespace OrleansBank.Adapters.Storage
                 catch (MySqlException ex)
                 {
                     transaction.Rollback();
-                    if (!CheckIdempotencyException(ex))
-                    {
-                        throw;
-                    }
+                    throw CheckIdempotencyException(ex);
                 }
             }
             finally
@@ -126,9 +124,13 @@ namespace OrleansBank.Adapters.Storage
             return Task.CompletedTask;
         }
 
-        private bool CheckIdempotencyException(MySqlException ex)
+        private Exception CheckIdempotencyException(MySqlException ex)
         {
-            return (ex.Number == (int)MySqlErrorCode.DuplicateKeyEntry && ex.Message.Contains("tb_idempotency_keys.PRIMARY"));
+            if (ex.Number == (int)MySqlErrorCode.DuplicateKeyEntry && ex.Message.Contains("tb_idempotency_keys.PRIMARY"))
+            {
+                return new IdempotencyFailureException("account", ex);
+            }
+            return ex;
         }
 
         private static void RecreateState(IGrainState grainState, Account account, string newEtag)

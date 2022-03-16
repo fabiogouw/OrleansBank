@@ -59,7 +59,7 @@ namespace OrleansBank.Adapters.Tests
 
         [Fact]
         [Trait("Category", "Integration")]
-        public async void Should_ReturnIdempotentially_When_InsertingAnExistingIdempotencyKeyInDatabase()
+        public async void Should_ConsiderIdempotentReturn_When_InsertingAnExistingIdempotencyKeyInDatabase()
         {
             await using var testContainer = await CreateDatabaseInstance();
             await testContainer.ExecScriptAsync("INSERT IGNORE INTO tb_account (account_id, balance, etag) VALUES (1999, 101.00, 1);");
@@ -69,10 +69,32 @@ namespace OrleansBank.Adapters.Tests
             {
                 var account = cluster.GrainFactory.GetGrain<IAccountActor>("1999");
                 await account.GetBalance(); // to activate the grain
-                // simulate when the idempotency already exists, but is not load in the grain due memory soft limit
+                // simulate when the idempotency key already exists, but is not load in the grain due memory soft limit
                 await testContainer.ExecScriptAsync("INSERT IGNORE INTO tb_idempotency_keys (idempotency_key, account_id) VALUES ('unique', 1999);");
                 var creditResult = await account.MakeCredit("unique", 3);
                 creditResult.Should().BeTrue();
+            }
+            finally
+            {
+                cluster.StopAllSilos();
+            }
+        }
+
+        [Fact]
+        [Trait("Category", "Integration")]
+        public async void Should_NotRepeatCreditOperation_When_ReceivingTheSameCallMultipleTimes()
+        {
+            await using var testContainer = await CreateDatabaseInstance();
+            await testContainer.ExecScriptAsync("INSERT IGNORE INTO tb_account (account_id, balance, etag) VALUES (1999, 101.00, 1);");
+
+            var cluster = CreateDeployedCluster();
+            try
+            {
+                var account = cluster.GrainFactory.GetGrain<IAccountActor>("1999");
+                await account.MakeCredit("unique", 3);
+                await account.MakeCredit("unique", 3);  // this call should be ignore
+                double balance = await account.GetBalance();
+                balance.Should().Be(104);   // this should be never 107 (101 + 3 + 3)
             }
             finally
             {
@@ -91,7 +113,7 @@ namespace OrleansBank.Adapters.Tests
             try
             {
                 var account = cluster.GrainFactory.GetGrain<IAccountActor>("1999");
-                double oldBalance = await account.GetBalance(); // to activate the grain
+                double oldBalance = await account.GetBalance();
                 // simulate an write error increasing the etag value
                 await testContainer.ExecScriptAsync("UPDATE tb_account SET etag = 2 WHERE account_id = 1999;");
                 try

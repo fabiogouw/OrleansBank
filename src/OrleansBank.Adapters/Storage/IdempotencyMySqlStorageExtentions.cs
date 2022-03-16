@@ -18,10 +18,7 @@ namespace OrleansBank.Adapters.Storage
             Action<IdempotencyMySqlStorageOptions> options)
         {
             services.AddOptions<IdempotencyMySqlStorageOptions>(providerName).Configure(options);
-            return services
-                .AddSingletonNamedService(providerName, Create)
-                //.AddSingletonNamedService(providerName, (s, n) => (ILifecycleParticipant<ISiloLifecycle>)s.GetRequiredServiceByName<IGrainStorage>(n))
-                ;
+            return services.AddSingletonNamedService(providerName, Create);
         }
 
         internal static IGrainStorage Create(IServiceProvider services, string name)
