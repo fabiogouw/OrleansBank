@@ -6,10 +6,17 @@ using System.Threading.Tasks;
 
 namespace OrleansBank.Domain
 {
-    public record Transaction
+    public class Transaction
     {
-        public string Id { get; init; }
+        public Account Account { get; private set; }
+        public string Id { get; private set; }
         public double Amount { get; init; }
-        public DateTime DateTime { get; init; }
+        public DateTime CreatedAt { get; init; }
+
+        public Transaction(Account account, string id)
+        {
+            Account = account;
+            Id = id;
+        }
     }
 }

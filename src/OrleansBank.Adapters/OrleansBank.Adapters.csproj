@@ -7,17 +7,41 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Storage\database_creation.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Orleans.Client" Version="3.6.0" />
     <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="3.6.0" />
     <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MySql.Data" Version="8.0.28" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OrleansBank.Domain\OrleansBank.Domain.csproj" />
     <ProjectReference Include="..\OrleansBank.UseCases\OrleansBank.UseCases.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Storage\database_creation.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

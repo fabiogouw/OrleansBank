@@ -1,8 +1,9 @@
 ﻿using Orleans;
+using OrleansBank.Adapters.Grain;
 using OrleansBank.Domain;
 using OrleansBank.UseCases.Ports.Out;
 
-namespace OrleansBank.Adapters
+namespace OrleansBank.Adapters.Storage
 {
     public class OrleansAccountRepository : IAccountRepository
     {
